@@ -1,0 +1,38 @@
+export const projects = [
+  {
+    id: 1,
+    title: "Asientos",
+    description: "Sistema de reserva y gestión de asientos para eventos y espacios.",
+    subdomain: "asientos",
+    technologies: ["React", "Node.js", "PostgreSQL"],
+    image: null
+  },
+  {
+    id: 2,
+    title: "Reqlut",
+    description: "Plataforma de reclutamiento y gestión de procesos de selección.",
+    subdomain: "reqlut",
+    technologies: ["React", "Python", "MongoDB"],
+    image: null
+  }
+]
+
+// Get the base domain from current hostname
+export function getBaseDomain() {
+  if (typeof window === 'undefined') return 'nicodev.work'
+
+  const hostname = window.location.hostname
+
+  // Map of supported domains
+  if (hostname.includes('nicoapps.com')) return 'nicoapps.com'
+  if (hostname.includes('nicodev.work')) return 'nicodev.work'
+
+  // Default for localhost/development
+  return 'nicodev.work'
+}
+
+// Build project URL based on current domain
+export function getProjectUrl(subdomain) {
+  const baseDomain = getBaseDomain()
+  return `https://${subdomain}.${baseDomain}`
+}
