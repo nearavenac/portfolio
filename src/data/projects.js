@@ -2,18 +2,18 @@ export const projects = [
   {
     id: 1,
     title: "Asientos",
-    description: "Sistema de reserva y gestión de asientos para eventos y espacios.",
+    description: "Contabilidad automatizada con IA para empresas chilenas. Sincroniza bancos, integra SII y genera asientos contables automáticamente.",
     subdomain: "asientos",
-    technologies: ["React", "Node.js", "PostgreSQL"],
-    image: null
+    technologies: ["React", "FastAPI", "PostgreSQL", "Fintoc"],
+    image: "/projects/asientos.png?v=2"
   },
   {
     id: 2,
     title: "Reqlut",
-    description: "Plataforma de reclutamiento y gestión de procesos de selección.",
+    description: "Plataforma de empleo chilena que conecta candidatos y empresas usando RIAH™, su sistema de IA para matching laboral.",
     subdomain: "reqlut",
-    technologies: ["React", "Python", "MongoDB"],
-    image: null
+    technologies: ["React", "Node.js", "MongoDB", "IA"],
+    image: "/projects/reqlut.png?v=2"
   }
 ]
 
