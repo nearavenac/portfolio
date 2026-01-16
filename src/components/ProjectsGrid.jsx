@@ -1,7 +1,7 @@
 import ProjectCard from './ProjectCard'
 import { projects } from '../data/projects'
 
-function ProjectsGrid() {
+function ProjectsGrid({ onReqlutClick }) {
   return (
     <section id="projects" className="projects-section">
       <div className="projects-header">
@@ -12,7 +12,11 @@ function ProjectsGrid() {
       </div>
       <div className="projects-grid">
         {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          <ProjectCard
+            key={project.id}
+            project={project}
+            onReqlutClick={onReqlutClick}
+          />
         ))}
       </div>
     </section>

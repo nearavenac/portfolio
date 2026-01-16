@@ -1,14 +1,23 @@
 import { getProjectUrl } from '../data/projects'
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onReqlutClick }) {
   const projectUrl = getProjectUrl(project.subdomain)
+  const isReqlut = project.subdomain === 'reqlut'
+
+  const handleClick = (e) => {
+    if (isReqlut && onReqlutClick) {
+      e.preventDefault()
+      onReqlutClick()
+    }
+  }
 
   return (
     <a
-      href={projectUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={isReqlut ? '#' : projectUrl}
+      target={isReqlut ? undefined : "_blank"}
+      rel={isReqlut ? undefined : "noopener noreferrer"}
       className="project-card"
+      onClick={handleClick}
     >
       <div className="project-image">
         {project.image ? (
@@ -28,9 +37,13 @@ function ProjectCard({ project }) {
           ))}
         </div>
         <div className="project-link">
-          <span>Visitar</span>
+          <span>{isReqlut ? 'Ver portales' : 'Visitar'}</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            {isReqlut ? (
+              <path d="M9 18l6-6-6-6"/>
+            ) : (
+              <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            )}
           </svg>
         </div>
       </div>
