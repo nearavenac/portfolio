@@ -1,4 +1,4 @@
-.PHONY: help dev build deploy clean nginx-install-asientos nginx-install-reqlut nginx-install-soymomo nginx-install-drapp nginx-install-gasmaule nginx-install-video nginx-status reqlut-dev-setup reqlut-export-portals drapp-db-download drapp-db-load drapp-db-sync
+.PHONY: help dev build deploy clean nginx-install-asientos nginx-install-reqlut nginx-install-soymomo nginx-install-drapp nginx-install-gasmaule nginx-install-video nginx-install-awscert nginx-status reqlut-dev-setup reqlut-export-portals drapp-db-download drapp-db-load drapp-db-sync awscert-start awscert-stop awscert-logs awscert-rebuild awscert-status
 
 # Default target - show help
 .DEFAULT_GOAL := help
@@ -34,6 +34,14 @@ help:
 	@echo "  make drapp-db-download      - Descargar BD de produccion (RDS via SSM)"
 	@echo "  make drapp-db-load          - Cargar dump en contenedor local"
 	@echo "  make drapp-db-sync          - Download + Load en un solo comando"
+	@echo ""
+	@echo "AWS Cert Platform:"
+	@echo "  make nginx-install-awscert  - Instalar nginx para awscert.nicodev.work/nicoapps.com"
+	@echo "  make awscert-start          - Iniciar servicios Docker"
+	@echo "  make awscert-stop           - Detener servicios Docker"
+	@echo "  make awscert-logs           - Ver logs de servicios"
+	@echo "  make awscert-rebuild        - Reconstruir y reiniciar servicios"
+	@echo "  make awscert-status         - Ver estado de servicios"
 	@echo ""
 
 dev:
@@ -566,4 +574,112 @@ drapp-db-sync: drapp-db-download drapp-db-load
 	@echo "========================================================"
 	@echo ""
 	@echo "La BD local esta sincronizada con produccion."
+	@echo ""
+
+# =============================================================================
+# AWS Certification Platform
+# =============================================================================
+# Project: /home/ubuntu/aws-cert-platform
+# Ports: Backend 8003, Frontend 5174
+# Domains: awscert.nicodev.work, awscert.nicoapps.com
+
+nginx-install-awscert:
+	@echo ""
+	@echo "========================================================"
+	@echo "   Nginx Installer - AWS Cert Platform                   "
+	@echo "========================================================"
+	@echo ""
+	@echo "Dominios: awscert.nicodev.work, awscert.nicoapps.com"
+	@echo ""
+	@if [ ! -f nginx/awscert.conf ]; then \
+		echo "Error: nginx/awscert.conf not found"; \
+		exit 1; \
+	fi
+	@# SSL certificate for awscert.nicodev.work
+	@if [ ! -f /etc/letsencrypt/live/awscert.nicodev.work/fullchain.pem ]; then \
+		echo "-> SSL certificate not found for awscert.nicodev.work..."; \
+		echo "-> Stopping nginx..."; \
+		sudo systemctl stop nginx 2>/dev/null || true; \
+		echo "-> Generating SSL certificate..."; \
+		sudo certbot certonly --standalone -d awscert.nicodev.work --non-interactive --agree-tos --email admin@nicodev.work || { \
+			echo "Error: Failed to generate SSL certificate"; \
+			echo "   Make sure DNS points to this server"; \
+			exit 1; \
+		}; \
+		echo "-> SSL certificate generated!"; \
+		echo ""; \
+	fi
+	@# SSL certificate for awscert.nicoapps.com
+	@if [ ! -f /etc/letsencrypt/live/awscert.nicoapps.com/fullchain.pem ]; then \
+		echo "-> SSL certificate not found for awscert.nicoapps.com..."; \
+		echo "-> Stopping nginx..."; \
+		sudo systemctl stop nginx 2>/dev/null || true; \
+		echo "-> Generating SSL certificate..."; \
+		sudo certbot certonly --standalone -d awscert.nicoapps.com --non-interactive --agree-tos --email admin@nicoapps.com || { \
+			echo "Error: Failed to generate SSL certificate"; \
+			echo "   Make sure DNS points to this server"; \
+			exit 1; \
+		}; \
+		echo "-> SSL certificate generated!"; \
+		echo ""; \
+	fi
+	@echo "-> Copying nginx configuration..."
+	@sudo cp nginx/awscert.conf /etc/nginx/sites-available/awscert
+	@echo "-> Creating symlink..."
+	@sudo ln -sf /etc/nginx/sites-available/awscert /etc/nginx/sites-enabled/
+	@echo "-> Testing nginx configuration..."
+	@sudo nginx -t
+	@echo "-> Reloading nginx..."
+	@sudo systemctl reload nginx || sudo systemctl start nginx
+	@echo ""
+	@echo "Nginx installed for AWS Cert Platform!"
+	@echo "  - https://awscert.nicodev.work"
+	@echo "  - https://awscert.nicoapps.com"
+	@echo ""
+
+awscert-start:
+	@echo ""
+	@echo "========================================================"
+	@echo "   AWS Cert Platform - Start Services                    "
+	@echo "========================================================"
+	@echo ""
+	@cd /home/ubuntu/aws-cert-platform && docker compose up -d
+	@echo ""
+	@echo "Services started!"
+	@echo "  - Backend: http://localhost:8003"
+	@echo "  - Frontend: http://localhost:5174"
+	@echo ""
+
+awscert-stop:
+	@echo ""
+	@echo "========================================================"
+	@echo "   AWS Cert Platform - Stop Services                     "
+	@echo "========================================================"
+	@echo ""
+	@cd /home/ubuntu/aws-cert-platform && docker compose down
+	@echo ""
+	@echo "Services stopped!"
+	@echo ""
+
+awscert-logs:
+	@cd /home/ubuntu/aws-cert-platform && docker compose logs -f
+
+awscert-rebuild:
+	@echo ""
+	@echo "========================================================"
+	@echo "   AWS Cert Platform - Rebuild Services                  "
+	@echo "========================================================"
+	@echo ""
+	@cd /home/ubuntu/aws-cert-platform && docker compose up -d --build
+	@echo ""
+	@echo "Services rebuilt and started!"
+	@echo ""
+
+awscert-status:
+	@echo ""
+	@echo "========================================================"
+	@echo "   AWS Cert Platform - Status                            "
+	@echo "========================================================"
+	@echo ""
+	@cd /home/ubuntu/aws-cert-platform && docker compose ps
 	@echo ""
