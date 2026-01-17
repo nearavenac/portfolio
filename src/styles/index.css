@@ -749,3 +749,77 @@ img {
     gap: 0.5rem;
   }
 }
+
+/* DrApp Modal */
+.drapp-modal {
+  max-width: 600px;
+}
+
+.drapp-portals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.drapp-portal-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.drapp-portal-card:hover {
+  border-color: var(--color-primary);
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateY(-2px);
+}
+
+.drapp-portal-icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.drapp-portal-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.drapp-portal-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.drapp-portal-desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.drapp-portal-card .portal-arrow {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: var(--transition);
+}
+
+.drapp-portal-card:hover .portal-arrow {
+  color: var(--color-primary);
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 600px) {
+  .drapp-portals-grid {
+    grid-template-columns: 1fr;
+  }
+}

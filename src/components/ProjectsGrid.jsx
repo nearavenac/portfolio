@@ -1,7 +1,9 @@
 import ProjectCard from './ProjectCard'
-import { projects } from '../data/projects'
+import { getFilteredProjects } from '../data/projects'
 
-function ProjectsGrid({ onReqlutClick }) {
+function ProjectsGrid({ onReqlutClick, onDrappClick }) {
+  const projects = getFilteredProjects()
+
   return (
     <section id="projects" className="projects-section">
       <div className="projects-header">
@@ -16,6 +18,7 @@ function ProjectsGrid({ onReqlutClick }) {
             key={project.id}
             project={project}
             onReqlutClick={onReqlutClick}
+            onDrappClick={onDrappClick}
           />
         ))}
       </div>

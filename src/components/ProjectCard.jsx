@@ -1,21 +1,26 @@
 import { getProjectUrl } from '../data/projects'
 
-function ProjectCard({ project, onReqlutClick }) {
+function ProjectCard({ project, onReqlutClick, onDrappClick }) {
   const projectUrl = getProjectUrl(project.subdomain)
   const isReqlut = project.subdomain === 'reqlut'
+  const isDrapp = project.subdomain === 'drapp'
+  const hasPortals = isReqlut || isDrapp
 
   const handleClick = (e) => {
     if (isReqlut && onReqlutClick) {
       e.preventDefault()
       onReqlutClick()
+    } else if (isDrapp && onDrappClick) {
+      e.preventDefault()
+      onDrappClick()
     }
   }
 
   return (
     <a
-      href={isReqlut ? '#' : projectUrl}
-      target={isReqlut ? undefined : "_blank"}
-      rel={isReqlut ? undefined : "noopener noreferrer"}
+      href={hasPortals ? '#' : projectUrl}
+      target={hasPortals ? undefined : "_blank"}
+      rel={hasPortals ? undefined : "noopener noreferrer"}
       className="project-card"
       onClick={handleClick}
     >
@@ -37,9 +42,9 @@ function ProjectCard({ project, onReqlutClick }) {
           ))}
         </div>
         <div className="project-link">
-          <span>{isReqlut ? 'Ver portales' : 'Visitar'}</span>
+          <span>{hasPortals ? 'Ver portales' : 'Visitar'}</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            {isReqlut ? (
+            {hasPortals ? (
               <path d="M9 18l6-6-6-6"/>
             ) : (
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
