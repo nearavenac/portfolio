@@ -1,17 +1,66 @@
 # Nico Portfolio
 
-Portfolio personal que muestra los proyectos de Nico. Accesible desde nicodev.work y nicoapps.com.
+Portfolio personal que muestra los proyectos de Nico. Accesible desde dos dominios:
+- **nicodev.work** - Proyectos públicos
+- **nicoapps.com** - Todos los proyectos (incluyendo privados)
 
-## Proyectos actuales
+## Proyectos
 
-- **Asientos** - https://asientos.nicodev.work
-- **Reqlut** - https://reqlut.nicodev.work
+### Públicos (ambos dominios)
+
+| Proyecto | Descripción | Stack | URL |
+|----------|-------------|-------|-----|
+| **Asientos** | Contabilidad automatizada con IA para empresas chilenas | React, FastAPI, PostgreSQL, Fintoc | asientos.nicodev.work |
+| **Reqlut** | Plataforma de empleo con IA para matching laboral (270+ portales) | PHP, Symfony, MySQL, Bootstrap | reqlut*.nicodev.work |
+
+### Privados (solo nicoapps.com)
+
+| Proyecto | Descripción | Stack | URL |
+|----------|-------------|-------|-----|
+| **SoyMomo** | Sistema de gestión de licencias para dispositivos SoyMomo | FastAPI, PostgreSQL, Bootstrap, Chart.js | soymomo.nicoapps.com |
+| **DrApp** | Plataforma médica integral (profesionales, centros, pacientes) | PHP, Symfony, MySQL, Twig | ion/center/pacientes.nicoapps.com |
+| **Gasmaule** | Sistema de gestión para distribución de gas | Laravel, Vue.js, MySQL, Redis | gasmaule.nicoapps.com |
+| **Video Generator** | Generador de videos cortos estilo TikTok usando IA | React, FastAPI, Celery, Gemini AI | video.nicoapps.com |
 
 ## Tech Stack
 
 - React 18
 - Vite 6
 - CSS puro (sin frameworks)
+- Nginx
+
+## Comandos Make
+
+### Desarrollo y Deploy
+
+```bash
+make dev                    # Servidor de desarrollo (Vite)
+make build                  # Build de producción
+make deploy                 # Build + instalar nginx + reload
+make clean                  # Limpiar dist y node_modules
+```
+
+### Nginx
+
+```bash
+make nginx-install-asientos   # Instalar nginx para asientos
+make nginx-install-reqlut     # Instalar nginx para reqlut (wildcard)
+make nginx-install-soymomo    # Instalar nginx para soymomo
+make nginx-install-drapp      # Instalar nginx para drapp
+make nginx-install-gasmaule   # Instalar nginx para gasmaule
+make nginx-install-video      # Instalar nginx para video
+make nginx-status             # Ver estado de nginx
+```
+
+### Base de datos
+
+```bash
+make reqlut-dev-setup         # Configurar BD Reqlut para desarrollo
+make reqlut-export-portals    # Exportar portales Reqlut a JSON
+make drapp-db-download        # Descargar BD DrApp de producción
+make drapp-db-load            # Cargar dump en contenedor local
+make drapp-db-sync            # Download + Load en un solo comando
+```
 
 ## Desarrollo
 
@@ -24,49 +73,26 @@ npm run dev
 
 # Crear build de producción
 npm run build
-
-# Preview del build
-npm run preview
 ```
 
 ## Agregar un nuevo proyecto
 
-Edita el archivo `src/data/projects.js`:
+1. Editar `src/data/projects.js`:
 
 ```javascript
-export const projects = [
-  // ... proyectos existentes
-  {
-    id: 3, // incrementar el ID
-    title: "Nombre del proyecto",
-    description: "Descripción breve del proyecto",
-    url: "https://proyecto.nicodev.work",
-    technologies: ["React", "Node.js"],
-    image: "/projects/proyecto.png" // opcional, puede ser null
-  }
-]
+{
+  id: 7,
+  title: "Nuevo Proyecto",
+  description: "Descripción del proyecto",
+  subdomain: "nuevo",
+  technologies: ["React", "Node.js"],
+  image: "/projects/nuevo.png",
+  nicoappsOnly: true  // opcional: solo visible en nicoapps.com
+}
 ```
 
-Si agregas una imagen, colócala en `public/projects/`.
-
-## Deploy con Nginx
-
-1. Generar el build:
-```bash
-npm run build
-```
-
-2. Copiar la configuración de nginx:
-```bash
-sudo cp nginx/portfolio.conf /etc/nginx/sites-available/portfolio
-sudo ln -s /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/
-```
-
-3. Verificar y recargar nginx:
-```bash
-sudo nginx -t
-sudo systemctl reload nginx
-```
+2. Agregar imagen en `public/projects/`
+3. Ejecutar `make deploy`
 
 ## Estructura del proyecto
 
@@ -74,9 +100,17 @@ sudo systemctl reload nginx
 portfolio/
 ├── src/
 │   ├── components/     # Componentes React
-│   ├── data/           # Datos de proyectos
+│   ├── data/           # Datos de proyectos y portales
 │   └── styles/         # Estilos CSS
-├── public/             # Assets estáticos
-├── nginx/              # Configuración nginx
+├── public/
+│   └── projects/       # Screenshots de proyectos
+├── nginx/              # Configuraciones nginx
+├── sql/                # Scripts SQL para BD
 └── dist/               # Build de producción (generado)
 ```
+
+## Notas
+
+- Los portales de Reqlut se exportan desde MySQL con `make reqlut-export-portals`
+- Usar `--default-character-set=utf8mb4` para preservar tildes en la exportación
+- Las credenciales de DrApp se configuran via variables de entorno

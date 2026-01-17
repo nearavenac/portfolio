@@ -1,7 +1,8 @@
-import { getProjectUrl } from '../data/projects'
+import { getProjectUrl, getImageUrl } from '../data/projects'
 
 function ProjectCard({ project, onReqlutClick, onDrappClick }) {
   const projectUrl = getProjectUrl(project.subdomain)
+  const imageUrl = getImageUrl(project.image)
   const isReqlut = project.subdomain === 'reqlut'
   const isDrapp = project.subdomain === 'drapp'
   const hasPortals = isReqlut || isDrapp
@@ -25,8 +26,8 @@ function ProjectCard({ project, onReqlutClick, onDrappClick }) {
       onClick={handleClick}
     >
       <div className="project-image">
-        {project.image ? (
-          <img src={project.image} alt={project.title} />
+        {imageUrl ? (
+          <img src={imageUrl} alt={project.title} />
         ) : (
           <div className="project-placeholder">
             <span>{project.title.charAt(0)}</span>

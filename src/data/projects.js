@@ -1,3 +1,12 @@
+// Cache buster version - increment to force image refresh
+export const ASSETS_VERSION = 3
+
+// Helper to add version to image URLs
+export function getImageUrl(path) {
+  if (!path) return null
+  return `${path}?v=${ASSETS_VERSION}`
+}
+
 export const projects = [
   {
     id: 1,
@@ -5,7 +14,7 @@ export const projects = [
     description: "Contabilidad automatizada con IA para empresas chilenas. Sincroniza bancos, integra SII y genera asientos contables automáticamente.",
     subdomain: "asientos",
     technologies: ["React", "FastAPI", "PostgreSQL", "Fintoc"],
-    image: "/projects/asientos.png?v=2"
+    image: "/projects/asientos.png"
   },
   {
     id: 2,
@@ -13,7 +22,7 @@ export const projects = [
     description: "Plataforma de empleo chilena que conecta candidatos y empresas usando RIAH™, su sistema de IA para matching laboral.",
     subdomain: "reqlut",
     technologies: ["PHP", "Symfony", "MySQL", "Bootstrap"],
-    image: "/projects/reqlut.png?v=2"
+    image: "/projects/reqlut.png"
   },
   {
     id: 3,
@@ -30,7 +39,7 @@ export const projects = [
     description: "Plataforma médica integral con portales para profesionales, centros de salud y pacientes. Gestión de citas, fichas clínicas, pagos y telemedicina.",
     subdomain: "drapp",
     technologies: ["PHP", "Symfony", "MySQL", "Twig"],
-    image: "/projects/drapp.png?v=2",
+    image: "/projects/drapp.png",
     nicoappsOnly: true,
     portals: [
       { name: "Profesionales", subdomain: "ion" },
@@ -54,7 +63,7 @@ export const projects = [
     description: "Generador de videos cortos estilo TikTok usando IA. Crea guiones con Gemini, genera audio y compone videos automáticamente.",
     subdomain: "video",
     technologies: ["React", "FastAPI", "Celery", "Gemini AI"],
-    image: "/projects/video.png?v=2",
+    image: "/projects/video.png",
     nicoappsOnly: true
   }
 ]
