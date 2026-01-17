@@ -1,5 +1,5 @@
 // Cache buster version - increment to force image refresh
-export const ASSETS_VERSION = 3
+export const ASSETS_VERSION = 4
 
 // Helper to add version to image URLs
 export function getImageUrl(path) {
@@ -64,6 +64,15 @@ export const projects = [
     subdomain: "video",
     technologies: ["React", "FastAPI", "Celery", "Gemini AI"],
     image: "/projects/video.png",
+    nicoappsOnly: true
+  },
+  {
+    id: 7,
+    title: "AWS Cert Platform",
+    description: "Plataforma de práctica para certificaciones AWS con preguntas de estilo real, simulación de exámenes, y seguimiento de progreso por dominio.",
+    subdomain: "awscert",
+    technologies: ["React", "FastAPI", "PostgreSQL", "Redis"],
+    image: "/projects/awscert.png",
     nicoappsOnly: true
   }
 ]
